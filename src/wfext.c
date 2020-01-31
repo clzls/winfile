@@ -361,18 +361,22 @@ FreeExtensions()
 {
    INT i;
    HMENU hMenuFrame;
+   INT iMax;
+   HWND hwndActive;
 
    FreeToolbarExtensions();
 
 
    hMenuFrame = GetMenu(hwndFrame);
-
-   // we are going to delete all extensions and thus each one to delete is at the same place
-   UINT posToDelete = MapIDMToMenuPos(IDM_EXTENSIONS);
+   hwndActive = (HWND)SendMessage(hwndMDIClient, WM_MDIGETACTIVE, 0, 0L);
+   if (hwndActive && GetWindowLongPtr(hwndActive, GWL_STYLE) & WS_MAXIMIZE)
+      iMax = 1;
+   else
+      iMax = 0;
 
    for (i = 0; i < iNumExtensions; i++) {
       (extensions[i].ExtProc)(NULL, FMEVENT_UNLOAD, 0L);
-      DeleteMenu(hMenuFrame, posToDelete, MF_BYPOSITION);
+      DeleteMenu(hMenuFrame, IDM_EXTENSIONS + iMax, MF_BYPOSITION);
       FreeLibrary((HANDLE)extensions[i].hModule);
    }
    iNumExtensions = 0;

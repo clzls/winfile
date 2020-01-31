@@ -1805,8 +1805,15 @@ Fail:
 
    if (!lpfnAcledit) {
 
-      DeleteMenu(hMenuFrame, MapIDMToMenuPos(IDM_SECURITY), MF_BYPOSITION);
-      bSecMenuDeleted = TRUE;
+	  INT iMax;
+	  HWND hwndActive;
+	  hwndActive = (HWND)SendMessage(hwndMDIClient, WM_MDIGETACTIVE, 0, 0L);
+	  if (hwndActive && GetWindowLongPtr(hwndActive, GWL_STYLE) & WS_MAXIMIZE)
+	     iMax = 1;
+	  else
+	     iMax = 0;
+
+      DeleteMenu(hMenuFrame, IDM_SECURITY + iMax, MF_BYPOSITION);
       DrawMenuBar(hwndFrame);
 
       PostMessage(hwndToolbar, TB_ENABLEBUTTON, IDM_PERMISSIONS, FALSE);

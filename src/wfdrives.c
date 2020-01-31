@@ -117,7 +117,7 @@ NewTree(
 		   psz = pszSearchDir + lstrlen(szDir) + 1;
 
 		   pszInitialDirSel = (LPWSTR)LocalAlloc(LMEM_FIXED,
-               ByteCountOf(lstrlen(psz) + 1));
+			   lstrlen(psz) * sizeof(*psz));
 		   if (pszInitialDirSel)
 			   lstrcpy(pszInitialDirSel, psz);
 	   }
